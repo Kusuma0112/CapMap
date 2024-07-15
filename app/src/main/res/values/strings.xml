@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">CapMap</string>
+    <string name="login_string">Already have an account? <b>Login here</b></string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget password?</string>
+    <string name="title_home">home</string>
+    <string name="title_dashboard">placements</string>
+    <string name="title_notifications">contribute</string>
+    <string name="title_contribute">contribute</string>
+    <string name="title_navigate">navigate</string>
+    <string name="title_profile">profile</string>
+    <string name="noteforaddingCompany">This contribution will help for sure!,make sure it properly given any data produced will verified and found guilty of using it mallecious way the account will be terminated immedeatly</string>
+</resources>

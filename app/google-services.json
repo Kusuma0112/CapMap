@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "509057413063",
+    "project_id": "capmap-29bdb",
+    "storage_bucket": "capmap-29bdb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509057413063:android:9992c12db025d762d9b3e2",
+        "android_client_info": {
+          "package_name": "com.example.capmap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMgwVA5sFNVRo7be8JugESPqozLbxBops"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

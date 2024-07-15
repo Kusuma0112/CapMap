@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.capmap.fragements.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.capmap.fragements.placements.PlacementFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_placement" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.capmap.fragements.contribute.ContributeFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_contribute" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_addCompanyFragment"
+            app:destination="@id/addCompanyFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_editCompanyFragment"
+            app:destination="@id/editCompanyFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_markCalenderFragment"
+            app:destination="@id/markCalenderFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_editCalenderFragment"
+            app:destination="@id/editCalenderFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_giveNotificationFragment"
+            app:destination="@id/giveNotificationFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_editNotificationFragment"
+            app:destination="@id/editNotificationFragment" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_myContributionsFragment"
+            app:destination="@id/myContributionsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_navigate"
+        android:name="com.example.capmap.fragements.navigate.NavigateFragment"
+        android:label="@string/title_navigate"
+        tools:layout="@layout/fragment_navigate" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.capmap.fragements.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.capmap.fragements.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_emailConfirmationFragment"
+            app:destination="@id/emailConfirmationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailChangeFragment"
+        android:name="com.example.capmap.fragements.EmailChangeFragment"
+        android:label="EmailChangeFragment"
+        tools:layout="@layout/fragment_email_change" />
+    <fragment
+        android:id="@+id/passwordChangeFragment"
+        android:name="com.example.capmap.fragements.PasswordChangeFragment"
+        android:label="PasswordChangeFragment"
+        tools:layout="@layout/fragment_password_change" />
+    <fragment
+        android:id="@+id/emailConfirmationFragment"
+        android:name="com.example.capmap.fragements.EmailConfirmationFragment"
+        android:label="EmailConfirmationFragment"
+        tools:layout="@layout/fragment_email_confirmation">
+            <argument
+                android:name="isPassword"
+                android:defaultValue="false"
+                app:argType="boolean" />
+        <action
+            android:id="@+id/action_emailConfirmationFragment_to_passwordChangeFragment"
+            app:destination="@id/passwordChangeFragment"
+            app:popUpTo="@id/button2" />
+        <action
+            android:id="@+id/action_emailConfirmationFragment_to_emailChangeFragment"
+            app:destination="@id/emailChangeFragment"
+            app:popUpTo="@id/button2" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCompanyFragment"
+        android:name="com.example.capmap.fragements.contribute.AddCompanyFragment"
+        android:label="AddCompanyFragment" />
+    <fragment
+        android:id="@+id/editCompanyFragment"
+        android:name="com.example.capmap.fragements.contribute.EditCompanyFragment"
+        android:label="EditCompanyFragment" />
+    <fragment
+        android:id="@+id/editCalenderFragment"
+        android:name="com.example.capmap.fragements.contribute.EditCalenderFragment"
+        android:label="EditCalenderFragment" />
+    <fragment
+        android:id="@+id/giveNotificationFragment"
+        android:name="com.example.capmap.fragements.contribute.GiveNotificationFragment"
+        android:label="GiveNotificationFragment" />
+    <fragment
+        android:id="@+id/myContributionsFragment"
+        android:name="com.example.capmap.fragements.contribute.MyContributionsFragment"
+        android:label="MyContributionsFragment" />
+    <fragment
+        android:id="@+id/editNotificationFragment"
+        android:name="com.example.capmap.fragements.contribute.EditNotificationFragment"
+        android:label="EditNotificationFragment" />
+    <fragment
+        android:id="@+id/markCalenderFragment"
+        android:name="com.example.capmap.fragements.contribute.MarkCalenderFragment"
+        android:label="MarkCalenderFragment" />
+
+</navigation>
