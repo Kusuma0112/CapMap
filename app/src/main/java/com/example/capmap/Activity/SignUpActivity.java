@@ -1,22 +1,21 @@
 package com.example.capmap.Activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.capmap.Constant.Allconstant;
@@ -24,11 +23,9 @@ import com.example.capmap.R;
 import com.example.capmap.Usermodel;
 import com.example.capmap.Utility.LoadingDialog;
 import com.example.capmap.databinding.ActivitySignUpBinding;
-import com.example.capmap.permission.AppPermissions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -44,18 +41,20 @@ import java.io.File;
 public class SignUpActivity extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private Uri ImageUri;
-    private AppPermissions appPermissions;
     private LoadingDialog loadingDialog;
     private String email, username, password;
     private StorageReference storageReference;
 
+    // Permission constant based on Android version
+    private static final String READ_STORAGE_PERMISSION = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ?
+            Manifest.permission.READ_MEDIA_IMAGES :
+            Manifest.permission.READ_EXTERNAL_STORAGE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        appPermissions = new AppPermissions();
         loadingDialog = new LoadingDialog(this);
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -66,6 +65,7 @@ public class SignUpActivity extends AppCompatActivity {
         binding.txtLogin.setOnClickListener(view -> {
             onBackPressed();
         });
+
         binding.btnSignUp.setOnClickListener(view -> {
             if (areFieldReady()) {
                 if (ImageUri != null) {
@@ -77,27 +77,25 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         binding.imgPick.setOnClickListener(view -> {
-            if (appPermissions.isStorageOk(this)) {
-                pickImage();
-            } else {
-                appPermissions.requestStoragePermission(this);
-            }
-        });
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+            pickImage();
         });
     }
 
+    private void requestStoragePermission() {
+        if (shouldShowRequestPermissionRationale(READ_STORAGE_PERMISSION)) {
+            Toast.makeText(this, "Storage permission is required to pick image", Toast.LENGTH_SHORT).show();
+        }
+        ActivityCompat.requestPermissions(this, new String[]{READ_STORAGE_PERMISSION}, Allconstant.STORAGE_REQUEST_CODE);
+    }
 
     private void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, Allconstant.PICK_IMAGE_REQUEST_CODE);
+        if (ContextCompat.checkSelfPermission(this, READ_STORAGE_PERMISSION) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, Allconstant.PICK_IMAGE_REQUEST_CODE);
+        } else {
+            requestStoragePermission();
+        }
     }
-
-
 
     private boolean areFieldReady() {
         username = binding.edtUsername.getText().toString().trim();
@@ -131,9 +129,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
             return true;
         }
-
     }
-
 
     private void signUp() {
         loadingDialog.startLoading();
@@ -141,21 +137,16 @@ public class SignUpActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> singUp) {
-
-                if (singUp.isSuccessful()) {
-
+            public void onComplete(@NonNull Task<AuthResult> signUp) {
+                if (signUp.isSuccessful()) {
                     storageReference.child(firebaseAuth.getUid() + Allconstant.IMAGE_PATH).putFile(ImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
                             Task<Uri> image = taskSnapshot.getStorage().getDownloadUrl();
                             image.addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> imageTask) {
-
                                     if (imageTask.isSuccessful()) {
-
                                         String url = imageTask.getResult().toString();
                                         UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName(username)
@@ -167,9 +158,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
-
-                                                            Usermodel userModel = new Usermodel(email,
-                                                                    username, url, true);
+                                                            Usermodel userModel = new Usermodel(email, username, url, true);
                                                             databaseReference.child(firebaseAuth.getUid())
                                                                     .setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                         @Override
@@ -183,9 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                                                             onBackPressed();
                                                                                         }
                                                                                     });
-
                                                                         }
-
                                                                     });
                                                         } else {
                                                             loadingDialog.stopLoading();
@@ -201,18 +188,18 @@ public class SignUpActivity extends AppCompatActivity {
                                     }
                                 }
                             });
-
                         }
                     });
 
                 } else {
                     loadingDialog.stopLoading();
-                    Log.d("TAG", "onComplete: Create user" + singUp.getException());
-                    Toast.makeText(SignUpActivity.this, "" + singUp.getException(), Toast.LENGTH_SHORT).show();
+                    Log.d("TAG", "onComplete: Create user" + signUp.getException());
+                    Toast.makeText(SignUpActivity.this, "" + signUp.getException(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -231,6 +218,7 @@ public class SignUpActivity extends AppCompatActivity {
             Log.d("TAG", "onActivityResult: " + cropError);
         }
     }
+
     private void startCrop(@NonNull Uri uri) {
         String destinationFileName = "SampleCropImage.jpeg";
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
@@ -252,12 +240,11 @@ public class SignUpActivity extends AppCompatActivity {
         return options;
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Allconstant.STORAGE_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 pickImage();
             } else {
                 Toast.makeText(this, "Storage permission denied.", Toast.LENGTH_SHORT).show();

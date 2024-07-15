@@ -1,19 +1,32 @@
 package com.example.capmap.fragements.placements;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.capmap.databinding.FragmentPlacementBinding;
+
+import com.bumptech.glide.Glide;
 import com.example.capmap.R;
+import com.example.capmap.databinding.FragmentPlacementBinding;
+import com.example.capmap.fragements.contribute.CompanyModel;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +35,12 @@ public class PlacementFragment extends Fragment {
 
     private FragmentPlacementBinding binding;
     private PlacementAdapter adapter;
-    private List<Company> companies; // Add a list to hold company data
+    private List<CompanyModel> companies;
+    private DatabaseReference databaseReference;
+    private FirebaseStorage storage;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        DashboardViewModel dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-
         binding = FragmentPlacementBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -37,21 +49,39 @@ public class PlacementFragment extends Fragment {
         adapter = new PlacementAdapter();
         recyclerView.setAdapter(adapter);
 
-        // Initialize company data
         companies = new ArrayList<>();
-        companies.add(new Company("Company 1", "Active", "Offer 1"));
-        companies.add(new Company("Company 2", "Inactive", "Offer 2"));
-        companies.add(new Company("Company 3", "Active", "Offer 3"));
-        // Add more companies to the list...
+        databaseReference = FirebaseDatabase.getInstance().getReference("Companies");
+        storage = FirebaseStorage.getInstance();
 
-        adapter.setCompanies(companies); // Pass the company data to the adapter
+        fetchCompanyData();
 
-        // Add a calendar button
         binding.calendarButton.setOnClickListener(v -> {
             // Show calendar dialog or activity here
         });
 
         return root;
+    }
+
+    private void fetchCompanyData() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                companies.clear();
+                for (DataSnapshot companySnapshot : snapshot.getChildren()) {
+                    CompanyModel company = companySnapshot.getValue(CompanyModel.class);
+                    if (company != null) {
+                        company.setKey(companySnapshot.getKey());
+                        companies.add(company);
+                    }
+                }
+                adapter.setCompanies(companies);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("PlacementFragment", "Error fetching company data", error.toException());
+            }
+        });
     }
 
     @Override
@@ -60,13 +90,13 @@ public class PlacementFragment extends Fragment {
         binding = null;
     }
 
-    // Adapter for the RecyclerView
     public class PlacementAdapter extends RecyclerView.Adapter<PlacementAdapter.ViewHolder> {
-        private List<Company> companies;
 
-        public void setCompanies(List<Company> companies) {
+        private List<CompanyModel> companies;
+
+        public void setCompanies(List<CompanyModel> companies) {
             this.companies = companies;
-            notifyDataSetChanged(); // Update the adapter
+            notifyDataSetChanged();
         }
 
         @NonNull
@@ -78,16 +108,36 @@ public class PlacementFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Company company = companies.get(position);
-            holder.companyLogo.setImageResource(R.drawable.company_logo);
-            holder.companyName.setText(company.getName());
+            CompanyModel company = companies.get(position);
+            StorageReference storageReference = storage.getReference("companies/" + company.getKey() + "/logo.jpg");
+            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    String downloadUrl = uri.toString();
+                    Glide.with(holder.itemView.getContext())
+                            .load(downloadUrl)
+                            .into(holder.companyLogo);
+                }
+            });
+
+            holder.companyName.setText(company.getCompanyName());
             holder.status.setText(company.getStatus());
             holder.offer.setText(company.getOffer());
+
+            holder.itemView.setOnClickListener(v -> {
+                int adapterPosition = holder.getAdapterPosition();
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    CompanyModel selectedCompany = companies.get(adapterPosition);
+                    Intent intent = new Intent(getContext(), CompanyDetailsActivity.class);
+                    intent.putExtra("key", selectedCompany.getKey());
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
-            return companies.size();
+            return companies == null ? 0 : companies.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -102,38 +152,7 @@ public class PlacementFragment extends Fragment {
                 companyName = itemView.findViewById(R.id.company_name);
                 status = itemView.findViewById(R.id.status);
                 offer = itemView.findViewById(R.id.offer);
-
-                itemView.setOnClickListener(v -> {
-                    // Start activity to show company details and description
-                    Intent intent = new Intent(getContext(), CompanyDetailsActivity.class);
-                    startActivity(intent);
-                });
             }
-        }
-    }
-
-    // Company model class
-    public static class Company {
-        private String name;
-        private String status;
-        private String offer;
-
-        public Company(String name, String status, String offer) {
-            this.name = name;
-            this.status = status;
-            this.offer = offer;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public String getOffer() {
-            return offer;
         }
     }
 }
