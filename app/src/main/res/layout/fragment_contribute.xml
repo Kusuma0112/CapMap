@@ -66,29 +66,35 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"/>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/ToAddCompany"
-                            android:layout_width="156dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:backgroundTint="#6621FF"
-                            android:text="To Add" />
+                            android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/ToEditComapny"
-                            android:layout_width="156dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:backgroundTint="#6621FF"
-                            android:text="To Edit" />
-                    </LinearLayout>
+                            <Button
+                                android:id="@+id/ToAddCompany"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="#6621FF"
+                                android:text="To Add"
+                                android:textColor="#FFFFFF" />
+
+                            <Button
+                                android:id="@+id/ToEditCompany"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
+                                android:backgroundTint="#6621FF"
+                                android:text="To Edit"
+                                android:textColor="#FFFFFF" />
+
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/textView5"
                             android:layout_width="match_parent"
@@ -105,20 +111,25 @@
 
                             <Button
                                 android:id="@+id/ToMarkCalender"
-                                android:layout_width="156dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
                                 android:backgroundTint="#6621FF"
-                                android:text="To Mark" />
+                                android:text="To Mark"
+                                android:textColor="#FFFFFF" />
+
 
                             <Button
                                 android:id="@+id/ToEditCalender"
-                                android:layout_width="156dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
                                 android:backgroundTint="#6621FF"
+                                android:textColor="#FFFFFF"
                                 android:text="To Edit" />
                         </LinearLayout>
                         <TextView
@@ -137,20 +148,24 @@
 
                             <Button
                                 android:id="@+id/ToGiveNotification"
-                                android:layout_width="156dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
                                 android:backgroundTint="#6621FF"
+                                android:textColor="#FFFFFF"
                                 android:text="To Give" />
 
                             <Button
                                 android:id="@+id/ToEditNotification"
-                                android:layout_width="156dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
                                 android:layout_marginEnd="10dp"
+                                android:layout_weight="1"
                                 android:backgroundTint="#6621FF"
+                                android:textColor="#FFFFFF"
                                 android:text="To Edit" />
                         </LinearLayout>
                     </LinearLayout>

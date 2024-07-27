@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="2"
-    tools:context=".Fragments.SettingsFragment"
+    tools:context=".fragements.profile.SettingsFragment"
     android:background="#ececec">
 
     <ScrollView

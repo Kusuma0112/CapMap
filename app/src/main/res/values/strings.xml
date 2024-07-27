@@ -11,4 +11,8 @@
     <string name="title_navigate">navigate</string>
     <string name="title_profile">profile</string>
     <string name="noteforaddingCompany">This contribution will help for sure!,make sure it properly given any data produced will verified and found guilty of using it mallecious way the account will be terminated immedeatly</string>
+    <string name="find_exam_seat_icon">TO FIND EXAM SEAT</string>
+    <string name="find_teacher_chamber_icon">FIND TEACHER CHAMBER</string>
+    <string name="contribution_icon">YOUR CONTIBUTIONS</string>
+    <string name="calendar_icon">CALENDER\n</string>
 </resources>
