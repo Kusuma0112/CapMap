@@ -26,7 +26,7 @@ public class ContributeFragment extends Fragment {
         View root = binding.getRoot();
 
         Button toAddCompany = binding.ToAddCompany;
-        Button toEditCompany = binding.ToEditComapny;
+        Button toEditCompany = binding.ToEditCompany;
         Button toMarkCalender = binding.ToMarkCalender;
         Button toEditCalender = binding.ToEditCalender;
         Button toGiveNotification = binding.ToGiveNotification;
