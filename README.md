@@ -2,12 +2,9 @@
 
 # CapMap
 ![CapMap Logo](https://github.com/Kusuma0112/CapMap/blob/master/app/src/main/res/drawable/capmap.png)
-Welcome to **CapMap**, a mobile application designed to enhance the campus experience for students, faculty, and visitors by providing a comprehensive and user-friendly mapping and navigation tool.
 
 
-## Project Overview
-
-CapMap is designed to address the navigational challenges and inefficiencies commonly experienced on university campuses. The app provides a seamless way to find exam seats, locate faculty offices, contribute updates to the campus map, and much more. Our goal is to simplify campus navigation and improve the academic and social experience for everyone on campus.
+The "CapMap" mobile application aims to revolutionize the campus experience by providing a comprehensive mapping and navigation tool specifically designed for university environments. This project involves the development of a user-friendly mobile app that features a secure login and signup system using email and password authentication. Key functionalities include "Find  Exam Seat," which allows students to quickly locate their examination rooms, and "Find Teachers Chamber," enabling users to easily find faculty offices. The "Contributions" feature encourages community engagement by allowing users to suggest updates or corrections to the map. A built-in "Calendar" helps students stay organized with important academic dates and events. The "Navigation" feature offers precise, step-by-step directions within the campus, enhancing mobility and convenience. Additionally, "Company Placement Details" provides crucial information about recruitment opportunities and company visits, supporting students in their career planning. The app also includes a simple profile dashboard where users can manage their personal information and settings. "CapMap" is designed to enhance the academic and social life of students, faculty, and visitors by making campus navigation and information access seamless and efficient
 
 ## Features
 
