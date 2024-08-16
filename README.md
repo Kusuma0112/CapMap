@@ -53,9 +53,9 @@ https://github.com/user-attachments/assets/58fd747d-3b9d-4318-8bc2-8d86ec99b447
 https://github.com/user-attachments/assets/5c9cacdb-74e0-4f5d-8b0c-7cec08965f65
 
 ## tech stack
-1.android studio-java
-2.google Maps
-3.Firebase - backend autho,storage
+- android studio-java
+- google Maps
+- Firebase - backend autho,storage
 
 ### Prerequisites
 
